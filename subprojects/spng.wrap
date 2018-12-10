@@ -1,0 +1,4 @@
+[wrap-git]
+directory = spng
+url=https://gitlab.com/randy408/libspng.git
+revision=v0.4.1
