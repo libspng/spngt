@@ -1,0 +1,4 @@
+[wrap-git]
+directory = miniz
+source_url = https://github.com/randy408/miniz.git
+revision = meson

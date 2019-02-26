@@ -1,0 +1,4 @@
+[wrap-git]
+directory = zlib-ng
+url = https://github.com/randy408/zlib-ng.git
+revision = meson
