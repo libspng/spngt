@@ -15,5 +15,5 @@ benchmark_images = subproject('benchmark_images')
 images = benchmark_images.get_variable('all_images')
 
 foreach img : images
-    benchmark('img', png_bench, args : img)
+    benchmark('decode', png_bench, args : img)
 endforeach
