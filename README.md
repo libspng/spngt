@@ -8,10 +8,14 @@ Benchmark results can be viewed at [libspng.org/comparison.html#peformance](http
 
 * [meson](https://mesonbuild.com)
 * zlib
-* libpng
 * lodepng and stb_image is included in the project
 
-libspng and the [benchmark images](https://gitlab.com/randy408/benchmark_images/) are automatically downloaded as [meson subprojects](https://mesonbuild.com/Wrap-dependency-system-manual.html).
+The following are automatically downloaded as [meson subprojects](https://mesonbuild.com/Wrap-dependency-system-manual.html):
+* [benchmark images](https://gitlab.com/randy408/benchmark_images/) 
+* libspng
+* libpng (depending on configuration)
+
+Switch between the system-provided libpng or download it as a subproject with `meson -Dlibpng_variant=download/system`.
 
 # Running the benchmark
 
@@ -19,6 +23,18 @@ libspng and the [benchmark images](https://gitlab.com/randy408/benchmark_images/
 meson --buildtype=release build
 cd build
 ninja
+ninja benchmark
+cat meson-logs/benchmarklog.txt
+```
+
+# Run with Profile-guided optimization (PGO)
+
+```
+meson build
+cd build
+meson configure -Dbuildtype=release -Db_pgo=generate
+ninja benchmark
+meson configure -Db_pgo=use
 ninja benchmark
 cat meson-logs/benchmarklog.txt
 ```
