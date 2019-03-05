@@ -60,7 +60,9 @@ unsigned char *getimage_libspng(unsigned char *buf, size_t size, size_t *out_siz
     }
 
 
-/*    r = spng_set_png_buffer(dec, buf, size);
+    spng_set_crc_action(ctx, SPNG_CRC_USE, SPNG_CRC_USE);
+
+/*    r = spng_set_png_buffer(ctx, buf, size);
 
     if(r)
     {
