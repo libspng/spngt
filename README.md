@@ -2,7 +2,7 @@
 
 png_bench is a benchmarking utility, it tests the PNG decoding performance of [libspng](https://libspng.org), [libpng](http://www.libpng.org/pub/png/libpng.html), [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and [lodepng](https://github.com/lvandeve/lodepng).
 
-Benchmark results can be viewed at [libspng.org/comparison.html#peformance](https://libspng.org/benchmarks)
+Benchmark results are hosted at [libspng.org/comparison.html#peformance](https://libspng.org/benchmarks)
 
 # Dependencies
 
@@ -32,7 +32,7 @@ cat meson-logs/benchmarklog.txt
 ```
 meson build
 cd build
-meson configure -Dbuildtype=release -Db_pgo=generate
+meson configure --buildtype=release -Db_pgo=generate
 ninja benchmark
 meson configure -Db_pgo=use
 ninja benchmark
