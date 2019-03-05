@@ -1,6 +1,11 @@
 project('png_bench', 'c')
 
-png_dep = dependency('libpng', version : '>=1.6.0')
+if get_option('libpng_variant') == 'download'
+    png_sp = subproject('libpng')
+    png_dep = png_sp.get_variable('png_dep')
+elif
+    png_dep = dependency('libpng', version : '>=1.6.0')
+endif
 
 spng_sp = subproject('spng')
 spng_dep = spng_sp.get_variable('spng_dep')

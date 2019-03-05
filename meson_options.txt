@@ -1,0 +1,1 @@
+option('libpng_variant', type : 'combo', choices : [ 'system', 'download' ], value : 'system', description : 'Link the system library or build from source')
