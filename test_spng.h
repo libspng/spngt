@@ -47,7 +47,7 @@ unsigned char *getimage_libspng(unsigned char *buf, size_t size, size_t *out_siz
         return NULL;
     }
 
-    struct read_fn_state state;
+    /*struct read_fn_state state;
     state.data = buf;
     state.bytes_left = size;
 
@@ -57,18 +57,18 @@ unsigned char *getimage_libspng(unsigned char *buf, size_t size, size_t *out_siz
     {
         printf("spng_set_png_stream() error: %s\n", spng_strerror(r));
         goto err;
-    }
+    }*/
 
 
     spng_set_crc_action(ctx, SPNG_CRC_USE, SPNG_CRC_USE);
 
-/*    r = spng_set_png_buffer(ctx, buf, size);
+    r = spng_set_png_buffer(ctx, buf, size);
 
     if(r)
     {
         printf("spng_set_png_buffer() error: %s\n", spng_strerror(r));
         goto err;
-    }*/
+    }
 
     r = spng_get_ihdr(ctx, &ihdr);
 
