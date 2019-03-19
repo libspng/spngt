@@ -4,7 +4,7 @@ if get_option('libpng_variant') == 'download'
     png_sp = subproject('libpng')
     png_dep = png_sp.get_variable('png_dep')
 else
-    png_dep = dependency('libpng', version : '>=1.6.0')
+    png_dep = dependency('libpng', version : '>=1.6.0', fallback : [ 'libpng', 'png_dep' ])
 endif
 
 spng_sp = subproject('spng')
