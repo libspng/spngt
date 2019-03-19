@@ -41,6 +41,8 @@ cat meson-logs/benchmarklog.txt
 
 # Cross-build for Android / ARM
 
+NOTE: This is currently not working, the libpng build files are broken for ARM.
+
 Compiling for Android requires the NDK.
 
 Edit the path for the binaries in `cross_arm.txt`, these must be absolute paths.
