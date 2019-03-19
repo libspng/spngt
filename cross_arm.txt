@@ -1,0 +1,11 @@
+[binaries]
+c = '/opt/aarch64-linux-android/bin/aarch64-linux-android-gcc'
+cpp = '/opt/aarch64-linux-android/bin/aarch64-linux-android-g++'
+ar = '/opt/aarch64-linux-android/bin/aarch64-linux-android-gcc-ar'
+strip = '/opt/aarch64-linux-android/bin/aarch64-linux-android-strip'
+
+[host_machine]
+system = 'linux'
+cpu_family = 'aarch64'
+cpu = 'aarch64'
+endian = 'little'

@@ -38,3 +38,15 @@ meson configure -Db_pgo=use
 ninja benchmark
 cat meson-logs/benchmarklog.txt
 ```
+
+# Cross-build for Android / ARM
+
+Compiling for Android requires the NDK.
+
+Edit the path for the binaries in `cross_arm.txt`, these must be absolute paths.
+
+Specify the the cross file when creating the cross build
+
+```
+meson --cross-file=cross_arm.txt arm_build
+```
