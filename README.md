@@ -11,7 +11,7 @@ Benchmark results are at available at https://libspng.org/comparison.
 
 * [meson](https://mesonbuild.com)
 * zlib
-* lodepng and stb_image is included in the project
+* lodepng and stb_image are included in the project
 
 The following are automatically downloaded as [meson subprojects](https://mesonbuild.com/Wrap-dependency-system-manual.html):
 * [benchmark images](https://gitlab.com/randy408/benchmark_images/) 
