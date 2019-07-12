@@ -7,7 +7,7 @@ SPNGT is a test suite and benchmarking utility for [libspng](https://libspng.org
 
 Benchmark results are at available at https://libspng.org/comparison.
 
-# Dependencies
+## Dependencies
 
 * [meson](https://mesonbuild.com)
 * zlib
@@ -20,14 +20,14 @@ The following are automatically downloaded as [meson subprojects](https://mesonb
 
 Switch between building libpng from source and the system-provided libpng with `meson -Dlibpng_variant=download/system`.
 
-# Creating a build
+## Creating a build
 
 ```
 meson --buildtype=release build
 cd build
 ```
 
-# Running the benchmark
+## Running the benchmark
 
 ```
 ninja
@@ -35,7 +35,7 @@ ninja benchmark
 cat meson-logs/benchmarklog.txt
 ```
 
-# Compile with Profile-guided optimization (PGO)
+## Compile with Profile-guided optimization (PGO)
 
 ```
 meson build
@@ -47,7 +47,7 @@ ninja benchmark
 cat meson-logs/benchmarklog.txt
 ```
 
-# Cross-build for Android / ARM
+## Cross-build for Android / ARM
 
 NOTE: This is currently not working, the libpng build files are broken for ARM.
 
