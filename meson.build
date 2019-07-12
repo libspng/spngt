@@ -1,24 +1,22 @@
-project('png_bench', 'c')
+project('spngt', 'c', default_options : 'c_std=c11')
+
+spngt_deps = []
+
+spng_sp = subproject('spng')
+spngt_deps += spng_sp.get_variable('spng_dep')
 
 if get_option('libpng_variant') == 'download'
     png_sp = subproject('libpng')
-    png_dep = png_sp.get_variable('png_dep')
+    spngt_deps += png_sp.get_variable('png_dep')
 else
-    png_dep = dependency('libpng', version : '>=1.6.0', fallback : [ 'libpng', 'png_dep' ])
+    spngt_deps += dependency('libpng', version : '>=1.6.0', fallback : [ 'libpng', 'png_dep' ])
 endif
-
-spng_sp = subproject('spng')
-spng_dep = spng_sp.get_variable('spng_dep')
-
-pngbench_deps = [ png_dep, spng_dep ]
-
-png_bench = executable('png_bench', 'png_bench.c', 'lodepng.c',
-                       dependencies : pngbench_deps,
-                       override_options : [ 'c_std=c11' ])
 
 benchmark_images = subproject('benchmark_images')
 images = benchmark_images.get_variable('all_images')
 
+spngt = executable('spngt','spngt.c', 'lodepng.c', dependencies : spngt_deps)
+
 foreach img : images
-    benchmark('decode', png_bench, args : img)
+    benchmark('decode', spngt, args : img)
 endforeach

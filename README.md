@@ -1,6 +1,9 @@
-# Overview
+# SPNGT
 
-png_bench is a benchmarking utility, it tests the PNG decoding performance of [libspng](https://libspng.org), [libpng](http://www.libpng.org/pub/png/libpng.html), [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and [lodepng](https://github.com/lvandeve/lodepng).
+SPNGT is a test suite and benchmarking utility for [libspng](https://libspng.org),
+[libpng](http://www.libpng.org/pub/png/libpng.html),
+[stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and
+[lodepng](https://github.com/lvandeve/lodepng).
 
 Benchmark results are at available at https://libspng.org/comparison.
 
@@ -15,19 +18,24 @@ The following are automatically downloaded as [meson subprojects](https://mesonb
 * libspng
 * libpng (depending on configuration)
 
-Switch between the system-provided libpng or download it as a subproject with `meson -Dlibpng_variant=download/system`.
+Switch between building libpng from source and the system-provided libpng with `meson -Dlibpng_variant=download/system`.
 
-# Running the benchmark
+# Creating a build
 
 ```
 meson --buildtype=release build
 cd build
+```
+
+# Running the benchmark
+
+```
 ninja
 ninja benchmark
 cat meson-logs/benchmarklog.txt
 ```
 
-# Run with Profile-guided optimization (PGO)
+# Compile with Profile-guided optimization (PGO)
 
 ```
 meson build
