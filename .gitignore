@@ -1,2 +1,7 @@
 /build/
 /subprojects/*/
+/.vscode/
+/trash/
+/arm_build/
+/bench_build/
+/benchmarks/
