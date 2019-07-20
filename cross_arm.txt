@@ -1,8 +1,10 @@
 [binaries]
-c = '/opt/aarch64-linux-android/bin/aarch64-linux-android-gcc'
-cpp = '/opt/aarch64-linux-android/bin/aarch64-linux-android-g++'
-ar = '/opt/aarch64-linux-android/bin/aarch64-linux-android-gcc-ar'
-strip = '/opt/aarch64-linux-android/bin/aarch64-linux-android-strip'
+c = '/opt/ndk/bin/aarch64-linux-android29-clang'
+cpp = '/opt/ndk/bin/aarch64-linux-android29-clang++'
+ar = '/opt/ndk/bin/aarch64-linux-android-ar'
+strip = '/opt/ndk/bin/aarch64-linux-android-strip'
+
+# /opt/ndk/ = Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64
 
 [host_machine]
 system = 'linux'
