@@ -1,6 +1,8 @@
+#define _POSIX_C_SOURCE 199309L
+#include <time.h>
+
 #include <inttypes.h>
 #include <stdio.h>
-#include <time.h>
 
 #include "test_png.h"
 
@@ -62,9 +64,9 @@ int main(int argc, char **argv)
         /* libpng */
         size_t img_png_size;
 
-        timespec_get(&a, TIME_UTC);
+        clock_gettime(CLOCK_MONOTONIC, &a);
         unsigned char *img_png = getimage_libpng(pngbuf, siz_pngbuf, &img_png_size, SPNG_FMT_RGBA8, 0);
-        timespec_get(&b, TIME_UTC);
+        clock_gettime(CLOCK_MONOTONIC, &b);
 
         long time_libpng = get_interval(&a, &b);
         if(best_libpng > time_libpng) best_libpng = time_libpng;
@@ -75,9 +77,9 @@ int main(int argc, char **argv)
         struct spng_ihdr ihdr;
         size_t img_spng_size;
 
-        timespec_get(&a, TIME_UTC);
+        clock_gettime(CLOCK_MONOTONIC, &a);
         unsigned char *img_spng = getimage_libspng(pngbuf, siz_pngbuf, &img_spng_size, SPNG_FMT_RGBA8, 0, &ihdr);
-        timespec_get(&b, TIME_UTC);
+        clock_gettime(CLOCK_MONOTONIC, &b);
 
         long time_spng = get_interval(&a, &b);
         if(best_spng > time_spng) best_spng = time_spng;
@@ -87,9 +89,9 @@ int main(int argc, char **argv)
         /* stb_image */
         int x, y, bpp;
 
-        timespec_get(&a, TIME_UTC);
+        clock_gettime(CLOCK_MONOTONIC, &a);
         unsigned char *img_stb = stbi_load_from_memory(pngbuf, siz_pngbuf, &x, &y, &bpp, 4);
-        timespec_get(&b, TIME_UTC);
+        clock_gettime(CLOCK_MONOTONIC, &b);
 
         long time_stb = get_interval(&a, &b);
         if(best_stb > time_stb) best_stb = time_stb;
@@ -99,9 +101,9 @@ int main(int argc, char **argv)
         /* lodepng */
         unsigned int width, height;
 
-        timespec_get(&a, TIME_UTC);
+        clock_gettime(CLOCK_MONOTONIC, &a);
         int e = lodepng_decode32(&img_png, &width, &height, pngbuf, siz_pngbuf);
-        timespec_get(&b, TIME_UTC);
+        clock_gettime(CLOCK_MONOTONIC, &b);
 
         long time_lodepng = get_interval(&a, &b);
         if(best_lodepng > time_lodepng) best_lodepng = time_lodepng;

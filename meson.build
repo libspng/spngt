@@ -1,4 +1,4 @@
-project('spngt', 'c', default_options : 'c_std=c11')
+project('spngt', 'c', default_options : 'c_std=c99')
 
 spngt_deps = []
 
