@@ -109,10 +109,10 @@ int main(int argc, char **argv)
         if(best_lodepng > time_lodepng) best_lodepng = time_lodepng;
     }
 
-    printf("libpng time:    %lu usec\n", best_libpng / 1000);
-    printf("spng time:      %lu usec\n", best_spng / 1000);
-    printf("stb_image time: %lu usec\n", best_stb / 1000);
-    printf("lodepng time:   %lu usec\n", best_lodepng / 1000);
+    printf("libpng:    %lu usec\n", best_libpng / 1000);
+    printf("spng:      %lu usec\n", best_spng / 1000);
+    printf("stb_image: %lu usec\n", best_stb / 1000);
+    printf("lodepng:   %lu usec\n", best_lodepng / 1000);
 
     free(pngbuf);
 
