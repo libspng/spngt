@@ -1,4 +1,4 @@
 [wrap-git]
 directory = benchmark_images
-url = git@gitlab.com:randy408/benchmark_images.git
+url = https://gitlab.com/randy408/benchmark_images.git
 revision=head
