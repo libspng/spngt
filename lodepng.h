@@ -1,5 +1,5 @@
 /*
-LodePNG version 20190630
+LodePNG version 20190714
 
 Copyright (c) 2005-2019 Lode Vandevenne
 
@@ -1936,3 +1936,4 @@ Account: lode dot vandevenne.
 
 Copyright (c) 2005-2019 Lode Vandevenne
 */
+
