@@ -9,12 +9,13 @@ Benchmark results are at available at https://libspng.org/comparison.
 
 ## Dependencies
 
+* Git LFS  for cloning benchmark images
 * [meson](https://mesonbuild.com)
 * zlib
 * lodepng and stb_image are included in the project
 
 The following are automatically downloaded as [meson subprojects](https://mesonbuild.com/Wrap-dependency-system-manual.html):
-* [benchmark images](https://gitlab.com/randy408/benchmark_images/) 
+* [benchmark images](https://gitlab.com/randy408/benchmark_images/)
 * libspng
 * libpng (depending on configuration)
 
@@ -49,8 +50,6 @@ cat meson-logs/benchmarklog.txt
 
 ## Cross-build for Android / ARM
 
-NOTE: This is currently not working, the libpng build files are broken for ARM.
-
 Compiling for Android requires the NDK.
 
 Edit the path for the binaries in `cross_arm.txt`, these must be absolute paths.
@@ -58,5 +57,5 @@ Edit the path for the binaries in `cross_arm.txt`, these must be absolute paths.
 Specify the the cross file when creating the cross build
 
 ```
-meson --cross-file=cross_arm.txt arm_build
+meson --cross-file=cross_arm.txt --buildtype=release arm_build
 ```
