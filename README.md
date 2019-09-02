@@ -5,7 +5,7 @@ SPNGT is a test suite and benchmarking utility for [libspng](https://libspng.org
 [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and
 [lodepng](https://github.com/lvandeve/lodepng).
 
-Benchmark results are at available at https://libspng.org/comparison.
+Benchmark results are at available at https://libspng.org.
 
 ## Dependencies
 
