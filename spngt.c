@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 
     FILE *png;
     unsigned char *pngbuf;
-    png = fopen(argv[1], "r");
+    png = fopen(argv[1], "rb");
     if(png==NULL)
     {
         printf("error opening input file %s\n", argv[1]);
