@@ -1,9 +1,13 @@
-project('spngt', 'c', default_options : 'c_std=c99')
+project('spngt', 'c', version : '1.0', default_options : 'c_std=c99')
 
 spngt_deps = []
 
-spng_sp = subproject('spng')
-spngt_deps += spng_sp.get_variable('spng_dep')
+if meson.is_subproject()
+    spngt_deps += dependency('spng')
+else
+    spng_sp = subproject('spng')
+    spngt_deps += spng_sp.get_variable('spng_dep')
+endif
 
 if get_option('libpng_variant') == 'download'
     png_sp = subproject('libpng')
