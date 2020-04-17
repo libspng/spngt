@@ -1,25 +1,28 @@
 # SPNGT
 
-SPNGT is a test suite and benchmarking utility for [libspng](https://libspng.org),
+SPNGT is a benchmarking and testing utility for [libspng](https://libspng.org),
 [libpng](http://www.libpng.org/pub/png/libpng.html),
 [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and
 [lodepng](https://github.com/lvandeve/lodepng).
+
+This is a standalone project, it is also used as a subproject in libspng for benchmarking
+and for hosting non-libspng code.
 
 Benchmark results are at available at https://libspng.org.
 
 ## Dependencies
 
-* Git LFS  for cloning benchmark images
-* [meson](https://mesonbuild.com)
+* Git LFS for downloading the benchmark images
+* [Meson](https://mesonbuild.com)
 * zlib
 * lodepng and stb_image are included in the project
 
-The following are automatically downloaded as [meson subprojects](https://mesonbuild.com/Wrap-dependency-system-manual.html):
+The following are automatically downloaded as [Meson subprojects](https://mesonbuild.com/Wrap-dependency-system-manual.html):
 * [benchmark images](https://gitlab.com/randy408/benchmark_images/)
 * libspng
 * libpng (depending on configuration)
 
-Switch between building libpng from source and the system-provided libpng with `meson -Dlibpng_variant=download/system`.
+Switch between building libpng from source and the host system's libpng with `meson -Dlibpng_variant=download/system`.
 
 ## Creating a build
 
