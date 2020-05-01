@@ -1,1 +1,3 @@
 option('libpng_variant', type : 'combo', choices : [ 'system', 'download' ], value : 'system', description : 'Link the system library or build from source')
+
+option('benchmarks', type : 'boolean', value : true, yield : true, description : 'used for integrating into libspng')
