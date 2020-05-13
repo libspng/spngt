@@ -18,7 +18,7 @@ Benchmark results are at available at https://libspng.org.
 * lodepng and stb_image are included in the project
 
 The following are automatically downloaded as [Meson subprojects](https://mesonbuild.com/Wrap-dependency-system-manual.html):
-* [benchmark images](https://gitlab.com/randy408/benchmark_images/)
+* [benchmark images](https://github.com/libspng/benchmark_images/)
 * libspng
 * libpng (depending on configuration)
 
