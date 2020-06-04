@@ -27,6 +27,25 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    if(!strcmp(argv[1], "info"))
+    {
+        unsigned int png_ver = png_access_version_number();
+
+        printf("png header version: %u.%u.%u, library version: %u.%u.%u\n",
+               PNG_LIBPNG_VER_MAJOR, PNG_LIBPNG_VER_MINOR, PNG_LIBPNG_VER_RELEASE,
+               png_ver / 10000, png_ver / 100 % 100, png_ver % 100);
+
+        printf("spng header version: %u.%u.%u, library version: %s\n",
+               SPNG_VERSION_MAJOR, SPNG_VERSION_MINOR, SPNG_VERSION_PATCH,
+               spng_version_string());
+        
+        printf("stb_image 2.19 (2018-02-11)\n");
+
+        printf("lodepng %s\n", LODEPNG_VERSION_STRING);
+
+        return 0;
+    }
+
     FILE *png;
     unsigned char *pngbuf;
     png = fopen(argv[1], "rb");

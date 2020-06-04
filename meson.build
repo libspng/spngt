@@ -23,6 +23,8 @@ images = benchmark_images.get_variable('all_images')
 
 spngt = executable('spngt','spngt.c', 'lodepng.c', dependencies : spngt_deps)
 
+benchmark('info', spngt, args : 'info')
+
 foreach img : images
     benchmark('decode', spngt, args : img)
 endforeach
