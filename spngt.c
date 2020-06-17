@@ -13,6 +13,8 @@
 
 #include "lodepng.h"
 
+static const runs = 5;
+
 long get_interval(struct timespec *a, struct timespec *b)
 {
     if ((b->tv_nsec - a->tv_nsec) < 0) return b->tv_nsec - a->tv_nsec + 1000000000;
@@ -42,6 +44,8 @@ int main(int argc, char **argv)
         printf("stb_image 2.19 (2018-02-11)\n");
 
         printf("lodepng %s\n", LODEPNG_VERSION_STRING);
+
+        printf("\ndecode times are the best of %d runs\n", runs);
 
         return 0;
     }
@@ -77,7 +81,7 @@ int main(int argc, char **argv)
     struct timespec a, b;
     long best_libpng = LONG_MAX, best_spng = LONG_MAX, best_stb = LONG_MAX, best_lodepng = LONG_MAX;
 
-    int i, runs = 5;
+    int i;
     for(i=0; i < runs; i++)
     {
         /* libpng */
