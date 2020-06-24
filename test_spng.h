@@ -1,7 +1,7 @@
 #ifndef TEST_SPNG_H
 #define TEST_SPNG_H
 
-#include <spng.h>
+#include <spng/spng.h>
 
 #include <stdio.h>
 #include <string.h>
