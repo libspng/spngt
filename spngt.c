@@ -1,5 +1,9 @@
-#define _POSIX_C_SOURCE 199309L
-#include <time.h>
+#if defined(_WIN32)
+    #include "windows.h"
+#else
+    #define _POSIX_C_SOURCE 199309L
+    #include <time.h>
+#endif
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -13,12 +17,20 @@
 
 #include "lodepng.h"
 
-static const runs = 5;
+static const int runs = 5;
 
-long get_interval(struct timespec *a, struct timespec *b)
+uint64_t spngt_time(void)
 {
-    if ((b->tv_nsec - a->tv_nsec) < 0) return b->tv_nsec - a->tv_nsec + 1000000000;
-    else return b->tv_nsec - a->tv_nsec;
+#if defined(_WIN32)
+    FILETIME ft;
+    GetSystemTimeAsFileTime(&ft);
+    ULARGE_INTEGER time = { .LowPart = ft.dwLowDateTime, .HighPart = ft.dwHighDateTime };
+    return time.QuadPart * 100;
+#else
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * 1000000000 + (uint64_t)ts.tv_nsec;
+#endif
 }
 
 int main(int argc, char **argv)
@@ -78,8 +90,8 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    struct timespec a, b;
-    long best_libpng = LONG_MAX, best_spng = LONG_MAX, best_stb = LONG_MAX, best_lodepng = LONG_MAX;
+    uint64_t a, b;
+    unsigned long int best_libpng = UINT64_MAX, best_spng = UINT64_MAX, best_stb = UINT64_MAX, best_lodepng = UINT64_MAX;
 
     int i;
     for(i=0; i < runs; i++)
@@ -87,11 +99,11 @@ int main(int argc, char **argv)
         /* libpng */
         size_t img_png_size;
 
-        clock_gettime(CLOCK_MONOTONIC, &a);
+        a = spngt_time();
         unsigned char *img_png = getimage_libpng(pngbuf, siz_pngbuf, &img_png_size, SPNG_FMT_RGBA8, 0);
-        clock_gettime(CLOCK_MONOTONIC, &b);
+        b = spngt_time();
 
-        long time_libpng = get_interval(&a, &b);
+        uint64_t time_libpng = b - a;
         if(best_libpng > time_libpng) best_libpng = time_libpng;
 
         free(img_png);
@@ -100,11 +112,11 @@ int main(int argc, char **argv)
         struct spng_ihdr ihdr;
         size_t img_spng_size;
 
-        clock_gettime(CLOCK_MONOTONIC, &a);
+        a = spngt_time();
         unsigned char *img_spng = getimage_libspng(pngbuf, siz_pngbuf, &img_spng_size, SPNG_FMT_RGBA8, 0, &ihdr);
-        clock_gettime(CLOCK_MONOTONIC, &b);
+        b = spngt_time();
 
-        long time_spng = get_interval(&a, &b);
+        uint64_t time_spng = b - a;
         if(best_spng > time_spng) best_spng = time_spng;
 
         free(img_spng);
@@ -112,11 +124,11 @@ int main(int argc, char **argv)
         /* stb_image */
         int x, y, bpp;
 
-        clock_gettime(CLOCK_MONOTONIC, &a);
+        a = spngt_time();
         unsigned char *img_stb = stbi_load_from_memory(pngbuf, siz_pngbuf, &x, &y, &bpp, 4);
-        clock_gettime(CLOCK_MONOTONIC, &b);
+        b = spngt_time();
 
-        long time_stb = get_interval(&a, &b);
+        uint64_t time_stb = b - a;
         if(best_stb > time_stb) best_stb = time_stb;
 
         free(img_stb);
@@ -124,11 +136,11 @@ int main(int argc, char **argv)
         /* lodepng */
         unsigned int width, height;
 
-        clock_gettime(CLOCK_MONOTONIC, &a);
+        a = spngt_time();
         int e = lodepng_decode32(&img_png, &width, &height, pngbuf, siz_pngbuf);
-        clock_gettime(CLOCK_MONOTONIC, &b);
+        b = spngt_time();
 
-        long time_lodepng = get_interval(&a, &b);
+        uint64_t time_lodepng = b - a;
         if(best_lodepng > time_lodepng) best_lodepng = time_lodepng;
     }
 
