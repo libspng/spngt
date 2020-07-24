@@ -27,7 +27,7 @@ Switch between building libpng from source and the host system's libpng with `me
 ## Creating a build
 
 ```
-meson --buildtype=release build
+meson --buildtype=release build  #add --default-library=static on Windows
 cd build
 ```
 
