@@ -1,32 +1,30 @@
-project('spngt', 'c', version : '1.0', default_options : 'c_std=c99')
+project('spngt', 'c',
+    version : '1.0',
+    meson_version : '>= 0.54.0',
+    default_options : [
+        'c_std=c99',
+        'buildtype=release'
+    ]
+)
 
-spngt_deps = []
+cc = meson.get_compiler('c')
 
-if meson.is_subproject()
-    spngt_deps += dependency('spng')
-else
-    spng_sp = subproject('spng')
-    spngt_deps += spng_sp.get_variable('spng_dep')
+spngt_deps = [
+    dependency('spng', fallback : ['spng', 'spng_dep']),
+    dependency('libpng', fallback : [ 'libpng', 'png_dep']),
+    cc.find_library('m', required : false) # stb_image
+]
+
+if get_option('benchmarks') == false
+    subdir_done()
 endif
 
-if get_option('libpng_variant') == 'download'
-    png_sp = subproject('libpng')
-    spngt_deps += png_sp.get_variable('png_dep')
-else
-    spngt_deps += dependency('libpng', version : '>=1.6.0', fallback : [ 'libpng', 'png_dep' ])
-endif
+spngt_exe = executable('spngt', 'spngt.c', 'lodepng.c', dependencies : spngt_deps)
 
-if get_option('benchmarks') == true
+benchmark('info', spngt_exe, args : 'info')
 
-benchmark_images = subproject('benchmark_images')
-images = benchmark_images.get_variable('all_images')
-
-spngt = executable('spngt','spngt.c', 'lodepng.c', dependencies : spngt_deps)
-
-benchmark('info', spngt, args : 'info')
+images = subproject('benchmark_images').get_variable('all_images')
 
 foreach img : images
-    benchmark('decode', spngt, args : img)
+    benchmark('decode', spngt_exe, args : img)
 endforeach
-
-endif #benchmarks

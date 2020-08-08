@@ -6,59 +6,51 @@ SPNGT is a benchmarking and testing utility for [libspng](https://libspng.org),
 [lodepng](https://github.com/lvandeve/lodepng).
 
 This is a standalone project, it is also used as a subproject in libspng for benchmarking
-and for hosting non-libspng code.
-
-Benchmark results are at available at https://libspng.org.
+and to host non-libspng code.
 
 ## Dependencies
 
-* Git LFS for downloading the benchmark images
-* [Meson](https://mesonbuild.com)
-* zlib
-* lodepng and stb_image are included in the project
+* [Meson](https://mesonbuild.com) 0.54.0 or later
+* Git LFS for downloading the [benchmark images](https://github.com/libspng/benchmark_images/)
+* lodepng and stb_image are included
 
-The following are automatically downloaded as [Meson subprojects](https://mesonbuild.com/Wrap-dependency-system-manual.html):
-* [benchmark images](https://github.com/libspng/benchmark_images/)
+Meson will fall back to using [wraps](https://mesonbuild.com/Wrap-dependency-system-manual.html)
+if the following are not found on the system:
 * libspng
-* libpng (depending on configuration)
-
-Switch between building libpng from source and the host system's libpng with `meson -Dlibpng_variant=download/system`.
+* libpng
+* zlib
 
 ## Creating a build
 
-```
-meson --buildtype=release build  #add --default-library=static on Windows
-cd build
+```bash
+# Add --default-library=static on Windows
+meson build 
 ```
 
 ## Running the benchmark
 
-```
-ninja
+```bash
+cd build
 ninja benchmark
 cat meson-logs/benchmarklog.txt
 ```
 
 ## Compile with Profile-guided optimization (PGO)
 
-```
-meson build
-cd build
-meson configure --buildtype=release -Db_pgo=generate
+```bash
+meson configure -Db_pgo=generate
 ninja benchmark
 meson configure -Db_pgo=use
 ninja benchmark
 cat meson-logs/benchmarklog.txt
 ```
 
-## Cross-build for Android / ARM
-
-Compiling for Android requires the NDK.
+## Cross-build for Android with NDK
 
 Edit the path for the binaries in `cross_arm.txt`, these must be absolute paths.
 
-Specify the the cross file when creating the cross build
+Specify the the cross file when creating the cross build:
 
-```
-meson --cross-file=cross_arm.txt --buildtype=release arm_build
+```bash
+meson --cross-file=cross_arm.txt arm_build
 ```
