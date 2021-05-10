@@ -1,0 +1,174 @@
+------------------------------------------------------------------------------
+NEON optimizations disabled
+------------------------------------------------------------------------------
+
+1/8 info   OK              0.01s
+17:14:10 libspng/bench/subprojects/spngt/spngt info
+----------------------------------- output -----------------------------------
+png header version: 1.6.37, library version: 1.6.37
+spng header version: 0.7.0, library version: 0.7.0-rc2
+stb_image 2.19 (2018-02-11)
+lodepng 20200306
+
+decode times are the best of 5 runs
+------------------------------------------------------------------------------
+
+2/8 decode OK             11.61s
+17:14:10 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/large_rgb8.png
+----------------------------------- output -----------------------------------
+libpng:    482519 usec
+spng:      541660 usec
+stb_image: 660612 usec
+lodepng:   588376 usec
+------------------------------------------------------------------------------
+
+3/8 decode OK             13.70s
+17:14:21 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/large_rgba8.png
+----------------------------------- output -----------------------------------
+libpng:    582953 usec
+spng:      661554 usec
+stb_image: 732072 usec
+lodepng:   716165 usec
+------------------------------------------------------------------------------
+
+4/8 decode OK              0.94s
+17:14:35 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/large_palette.png
+----------------------------------- output -----------------------------------
+libpng:    61460 usec
+spng:      34624 usec
+stb_image: 35069 usec
+lodepng:   45747 usec
+------------------------------------------------------------------------------
+
+5/8 decode OK              1.83s
+17:14:36 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/medium_rgb8.png
+----------------------------------- output -----------------------------------
+libpng:    71546 usec
+spng:      77031 usec
+stb_image: 104954 usec
+lodepng:   104128 usec
+------------------------------------------------------------------------------
+
+6/8 decode OK              2.34s
+17:14:38 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/medium_rgba8.png
+----------------------------------- output -----------------------------------
+libpng:    99397 usec
+spng:      111641 usec
+stb_image: 122839 usec
+lodepng:   119455 usec
+------------------------------------------------------------------------------
+
+7/8 decode OK              0.18s
+17:14:40 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/small_rgb8.png
+----------------------------------- output -----------------------------------
+libpng:    7020 usec
+spng:      7401 usec
+stb_image: 9720 usec
+lodepng:   9781 usec
+------------------------------------------------------------------------------
+
+8/8 decode OK              0.21s
+17:14:40 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/small_rgba8.png
+----------------------------------- output -----------------------------------
+libpng:    8590 usec
+spng:      9267 usec
+stb_image: 10344 usec
+lodepng:   10247 usec
+------------------------------------------------------------------------------
+
+
+
+Ok:                 8   
+Expected Fail:      0   
+Fail:               0   
+Unexpected Pass:    0   
+Skipped:            0   
+Timeout:            0   
+
+
+------------------------------------------------------------------------------
+NEON optimizations enabled
+------------------------------------------------------------------------------
+
+1/8 info   OK              0.01s
+09:51:51 libspng/bench/subprojects/spngt/spngt info
+----------------------------------- output -----------------------------------
+png header version: 1.6.36, library version: 1.6.36
+spng header version: 0.7.0, library version: 0.7.0-rc2
+stb_image 2.19 (2018-02-11)
+lodepng 20200306
+
+decode times are the best of 5 runs
+------------------------------------------------------------------------------
+
+2/8 decode OK             10.77s
+09:51:51 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/large_rgb8.png
+----------------------------------- output -----------------------------------
+libpng:    444902 usec
+spng:      390303 usec
+stb_image: 665230 usec
+lodepng:   586782 usec
+------------------------------------------------------------------------------
+
+3/8 decode OK             12.33s
+09:52:02 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/large_rgba8.png
+----------------------------------- output -----------------------------------
+libpng:    517079 usec
+spng:      453029 usec
+stb_image: 735644 usec
+lodepng:   721723 usec
+------------------------------------------------------------------------------
+
+4/8 decode OK              0.88s
+09:52:16 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/large_palette.png
+----------------------------------- output -----------------------------------
+libpng:    50495 usec
+spng:      28248 usec
+stb_image: 39458 usec
+lodepng:   46272 usec
+------------------------------------------------------------------------------
+
+5/8 decode OK              1.71s
+09:52:17 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/medium_rgb8.png
+----------------------------------- output -----------------------------------
+libpng:    65325 usec
+spng:      55812 usec
+stb_image: 105973 usec
+lodepng:   104963 usec
+------------------------------------------------------------------------------
+
+6/8 decode OK              2.09s
+09:52:19 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/medium_rgba8.png
+----------------------------------- output -----------------------------------
+libpng:    87050 usec
+spng:      75763 usec
+stb_image: 123009 usec
+lodepng:   119962 usec
+------------------------------------------------------------------------------
+
+7/8 decode OK              0.17s
+09:52:21 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/small_rgb8.png
+----------------------------------- output -----------------------------------
+libpng:    6269 usec
+spng:      5322 usec
+stb_image: 9784 usec
+lodepng:   9837 usec
+------------------------------------------------------------------------------
+
+8/8 decode OK              0.19s
+09:52:21 libspng/bench/subprojects/spngt/spngt libspng/bench/../subprojects/benchmark_images/small_rgba8.png
+----------------------------------- output -----------------------------------
+libpng:    7522 usec
+spng:      6331 usec
+stb_image: 10365 usec
+lodepng:   10273 usec
+------------------------------------------------------------------------------
+
+
+
+Ok:                 8   
+Expected Fail:      0   
+Fail:               0   
+Unexpected Pass:    0   
+Skipped:            0   
+Timeout:            0   
