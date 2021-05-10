@@ -1,5 +1,7 @@
 # Timings
 
+Timings are decode times to RGBA8, the most common output format.
+
 ## ARM64
 
 ### RPi 400 / Cortex-A72 1.8 GHz
@@ -26,4 +28,4 @@ Palette expansion to RGBA8 seems to be a lot slower with libpng,
 both with the Meson build port and the Debian ARM64 package,
 spng uses a refactored version of the same SIMD optimizations.
 
-[Full results](rpi400.txt).
+[Full results](rpi400.txt)
