@@ -19,6 +19,7 @@ if the following are not found on the system:
 * libspng
 * libpng
 * zlib
+* wuffs
 
 ## Creating a build
 
