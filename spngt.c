@@ -17,6 +17,18 @@
 
 #include "lodepng.h"
 
+#define WUFFS_IMPLEMENTATION
+
+#define WUFFS_CONFIG__MODULES
+#define WUFFS_CONFIG__MODULE__ADLER32
+#define WUFFS_CONFIG__MODULE__BASE
+#define WUFFS_CONFIG__MODULE__CRC32
+#define WUFFS_CONFIG__MODULE__DEFLATE
+#define WUFFS_CONFIG__MODULE__PNG
+#define WUFFS_CONFIG__MODULE__ZLIB
+
+//#include "wuffs-v0.3.c"
+
 static const int runs = 5;
 
 uint64_t spngt_time(void)

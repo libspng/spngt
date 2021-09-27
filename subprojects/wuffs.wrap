@@ -1,0 +1,6 @@
+[wrap-git]
+directory = wuffs
+url = https://github.com/google/wuffs-mirror-release-c.git
+revision = head
+
+patch_directory = wuffs

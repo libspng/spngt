@@ -1,5 +1,9 @@
 /build/
-/subprojects/*/
+/subprojects/spng/
+/subprojects/lodepng/
+/subprojects/libpng-1.6.37/
+/subprojects/zlib-1.2.11/
+/subprojects/packagecache
 /.vscode/
 /trash/
 /arm_build/
