@@ -29,3 +29,7 @@ images = subproject('benchmark_images').get_variable('all_images')
 foreach img : images
     benchmark('image_decode', spngt_exe, suite : 'decode', args : img)
 endforeach
+
+foreach img : images
+    benchmark('image_encode', spngt_exe, suite : 'encode',  args : [ img, 'enc' ])
+endforeach

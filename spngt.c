@@ -8,6 +8,8 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+#include <spngt_bench.h>
+
 #include "test_png.h"
 
 #include "test_spng.h"
@@ -29,9 +31,26 @@
 
 //#include "wuffs-v0.3.c"
 
-static const int runs = 5;
+struct spngt_times
+{
+    uint64_t libpng;
+    uint64_t spng;
+    uint64_t stb;
+    uint64_t lodepng;
+};
 
-uint64_t spngt_time(void)
+static const int decode_runs = 5;
+static const int encode_runs = 3;
+
+static void print_times(struct spngt_times *times)
+{
+    printf("libpng:    %" PRIu64 " usec\n", times->libpng / (uint64_t)1000);
+    printf("spng:      %" PRIu64 " usec\n", times->spng / (uint64_t)1000);
+    printf("stb_image: %" PRIu64 " usec\n", times->stb / (uint64_t)1000);
+    printf("lodepng:   %" PRIu64 " usec\n", times->lodepng / (uint64_t)1000);    
+}
+
+static uint64_t spngt_time(void)
 {
 #if defined(_WIN32)
     FILETIME ft;
@@ -45,12 +64,98 @@ uint64_t spngt_time(void)
 #endif
 }
 
+static int decode_benchmark(void *pngbuf, size_t siz_pngbuf)
+{
+    uint64_t a, b, elapsed = 0;
+    
+    struct spngt_times best = 
+    {
+        .libpng = UINT64_MAX,
+        .spng = UINT64_MAX,
+        .stb = UINT64_MAX,
+        .lodepng = UINT64_MAX
+    };
+
+    int i;
+    for(i=0; i < decode_runs; i++)
+    {
+        /* libpng */
+        size_t img_png_size;
+
+        a = spngt_time();
+        unsigned char *img_png = getimage_libpng(pngbuf, siz_pngbuf, &img_png_size, SPNG_FMT_RGBA8, 0);
+        b = spngt_time();
+
+        elapsed = b - a;
+        if(best.libpng > elapsed) best.libpng = elapsed;
+
+        free(img_png);
+
+        /* libspng */
+        struct spng_ihdr ihdr;
+        size_t img_spng_size;
+
+        a = spngt_time();
+        unsigned char *img_spng = getimage_libspng(pngbuf, siz_pngbuf, &img_spng_size, SPNG_FMT_RGBA8, 0, &ihdr);
+        b = spngt_time();
+
+        elapsed = b - a;
+        if(best.spng > elapsed) best.spng = elapsed;
+
+        free(img_spng);
+
+        /* stb_image */
+        int x, y, bpp;
+
+        a = spngt_time();
+        unsigned char *img_stb = stbi_load_from_memory(pngbuf, siz_pngbuf, &x, &y, &bpp, 4);
+        b = spngt_time();
+
+        elapsed = b - a;
+        if(best.stb > elapsed) best.stb = elapsed;
+
+        free(img_stb);
+
+        /* lodepng */
+        unsigned int width, height;
+
+        a = spngt_time();
+        int e = lodepng_decode32(&img_png, &width, &height, pngbuf, siz_pngbuf);
+        b = spngt_time();
+        
+        if(e) printf("ERROR: lodepng decode failed\n");
+
+        elapsed = b - a;
+        if(best.lodepng > elapsed) best.lodepng = elapsed;
+    }
+    
+    print_times(&best);
+    
+    return 0;
+}
+
+static int encode_benchmark(struct spngt_bench_params *params)
+{
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
     if(argc < 2)
     {
         printf("no input file\n");
         return 1;
+    }
+    
+    int do_encode = 0;
+    
+    if(argc > 2)
+    {
+        if(!strcmp(argv[2], "enc"))
+        {
+            do_encode = 1;
+        }
+        else printf("unrecognized option: %s\n", argv[2]);
     }
 
     if(!strcmp(argv[1], "info"))
@@ -69,7 +174,8 @@ int main(int argc, char **argv)
 
         printf("lodepng %s\n", LODEPNG_VERSION_STRING);
 
-        printf("\ndecode times are the best of %d runs\n", runs);
+        if(do_encode) printf("\nencode times are the best of %d runs\n", encode_runs);
+        printf("\ndecode times are the best of %d runs\n", decode_runs);
 
         return 0;
     }
@@ -77,7 +183,8 @@ int main(int argc, char **argv)
     FILE *png;
     unsigned char *pngbuf;
     png = fopen(argv[1], "rb");
-    if(png==NULL)
+    
+    if(png == NULL)
     {
         printf("error opening input file %s\n", argv[1]);
         return 1;
@@ -90,7 +197,8 @@ int main(int argc, char **argv)
     if(siz_pngbuf < 1) return 1;
 
     pngbuf = malloc(siz_pngbuf);
-    if(pngbuf==NULL)
+    
+    if(pngbuf == NULL)
     {
         printf("malloc() failed\n");
         return 1;
@@ -102,66 +210,20 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    uint64_t a, b;
-    unsigned long int best_libpng = UINT64_MAX, best_spng = UINT64_MAX, best_stb = UINT64_MAX, best_lodepng = UINT64_MAX;
+    int ret = 0;
 
-    int i;
-    for(i=0; i < runs; i++)
+    if(do_encode)
     {
-        /* libpng */
-        size_t img_png_size;
-
-        a = spngt_time();
-        unsigned char *img_png = getimage_libpng(pngbuf, siz_pngbuf, &img_png_size, SPNG_FMT_RGBA8, 0);
-        b = spngt_time();
-
-        uint64_t time_libpng = b - a;
-        if(best_libpng > time_libpng) best_libpng = time_libpng;
-
-        free(img_png);
-
-        /* libspng */
-        struct spng_ihdr ihdr;
-        size_t img_spng_size;
-
-        a = spngt_time();
-        unsigned char *img_spng = getimage_libspng(pngbuf, siz_pngbuf, &img_spng_size, SPNG_FMT_RGBA8, 0, &ihdr);
-        b = spngt_time();
-
-        uint64_t time_spng = b - a;
-        if(best_spng > time_spng) best_spng = time_spng;
-
-        free(img_spng);
-
-        /* stb_image */
-        int x, y, bpp;
-
-        a = spngt_time();
-        unsigned char *img_stb = stbi_load_from_memory(pngbuf, siz_pngbuf, &x, &y, &bpp, 4);
-        b = spngt_time();
-
-        uint64_t time_stb = b - a;
-        if(best_stb > time_stb) best_stb = time_stb;
-
-        free(img_stb);
-
-        /* lodepng */
-        unsigned int width, height;
-
-        a = spngt_time();
-        int e = lodepng_decode32(&img_png, &width, &height, pngbuf, siz_pngbuf);
-        b = spngt_time();
-
-        uint64_t time_lodepng = b - a;
-        if(best_lodepng > time_lodepng) best_lodepng = time_lodepng;
+        struct spngt_bench_params params = {0};
+     
+        ret = encode_benchmark(&params);
     }
-
-    printf("libpng:    %lu usec\n", best_libpng / 1000);
-    printf("spng:      %lu usec\n", best_spng / 1000);
-    printf("stb_image: %lu usec\n", best_stb / 1000);
-    printf("lodepng:   %lu usec\n", best_lodepng / 1000);
+    else
+    {
+        ret = decode_benchmark(pngbuf, siz_pngbuf);
+    } 
 
     free(pngbuf);
 
-    return 0;
+    return ret;
 }

@@ -31,9 +31,11 @@ meson build --buildtype=release
 
 ```bash
 cd build
-ninja benchmark
+meson test --benchmark --suite decode #or encode
 cat meson-logs/benchmarklog.txt
 ```
+
+`ninja benchmark` runs all tests.
 
 ## Compile with Profile-guided optimization (PGO)
 
