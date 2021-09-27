@@ -10,7 +10,7 @@ and to host non-libspng code.
 
 ## Dependencies
 
-* [Meson](https://mesonbuild.com) 0.54.0 or later
+* [Meson](https://mesonbuild.com) 0.55.0 or later
 * Git LFS for downloading the [benchmark images](https://github.com/libspng/benchmark_images/)
 * lodepng and stb_image are included
 
@@ -24,7 +24,7 @@ if the following are not found on the system:
 
 ```bash
 # Add --default-library=static on Windows
-meson build 
+meson build --buildtype=release
 ```
 
 ## Running the benchmark
@@ -44,6 +44,12 @@ meson configure -Db_pgo=use
 ninja benchmark
 cat meson-logs/benchmarklog.txt
 ```
+
+# Notes
+
+The benchmarks try to exclude system overhead by preloading the PNG into a buffer,
+this provides better feedback for development,
+real world performance may not be the same but has been accurate been so far.
 
 ## Cross-build for Android with NDK
 
