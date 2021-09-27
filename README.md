@@ -53,13 +53,3 @@ cat meson-logs/benchmarklog.txt
 The benchmarks try to exclude system overhead by preloading the PNG into a buffer,
 this provides better feedback for development,
 real world performance may not be the same but has been accurate been so far.
-
-## Cross-build for Android with NDK
-
-Edit the path for the binaries in `cross_arm.txt`, these must be absolute paths.
-
-Specify the the cross file when creating the cross build:
-
-```bash
-meson --cross-file=cross_arm.txt arm_build
-```
