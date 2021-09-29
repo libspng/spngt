@@ -11,25 +11,13 @@
 #include <spngt_bench.h>
 
 #include "test_png.h"
-
 #include "test_spng.h"
+#include "test_wuffs.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 #include "lodepng.h"
-
-#define WUFFS_IMPLEMENTATION
-
-#define WUFFS_CONFIG__MODULES
-#define WUFFS_CONFIG__MODULE__ADLER32
-#define WUFFS_CONFIG__MODULE__BASE
-#define WUFFS_CONFIG__MODULE__CRC32
-#define WUFFS_CONFIG__MODULE__DEFLATE
-#define WUFFS_CONFIG__MODULE__PNG
-#define WUFFS_CONFIG__MODULE__ZLIB
-
-//#include "wuffs-v0.3.c"
 
 struct spngt_times
 {
@@ -37,6 +25,7 @@ struct spngt_times
     uint64_t spng;
     uint64_t stb;
     uint64_t lodepng;
+    uint64_t wuffs;
 };
 
 static const int decode_runs = 5;
@@ -47,7 +36,8 @@ static void print_times(struct spngt_times *times)
     printf("libpng:    %" PRIu64 " usec\n", times->libpng / (uint64_t)1000);
     printf("spng:      %" PRIu64 " usec\n", times->spng / (uint64_t)1000);
     printf("stb_image: %" PRIu64 " usec\n", times->stb / (uint64_t)1000);
-    printf("lodepng:   %" PRIu64 " usec\n", times->lodepng / (uint64_t)1000);    
+    printf("lodepng:   %" PRIu64 " usec\n", times->lodepng / (uint64_t)1000);
+    printf("wuffs:     %" PRIu64 " usec\n", times->wuffs / (uint64_t)1000);
 }
 
 static uint64_t spngt_time(void)
@@ -73,7 +63,8 @@ static int decode_benchmark(void *pngbuf, size_t siz_pngbuf)
         .libpng = UINT64_MAX,
         .spng = UINT64_MAX,
         .stb = UINT64_MAX,
-        .lodepng = UINT64_MAX
+        .lodepng = UINT64_MAX,
+        .wuffs = UINT64_MAX
     };
 
     int i;
@@ -122,15 +113,31 @@ static int decode_benchmark(void *pngbuf, size_t siz_pngbuf)
         a = spngt_time();
         int e = lodepng_decode32(&img_png, &width, &height, pngbuf, siz_pngbuf);
         b = spngt_time();
-        
+
         if(e) printf("ERROR: lodepng decode failed\n");
 
         elapsed = b - a;
         if(best.lodepng > elapsed) best.lodepng = elapsed;
+
+        free(img_png);
+
+        /* wuffs */
+        size_t img_wuffs_size = 0;
+
+        a = spngt_time();
+        unsigned char *img_wuffs = getimage_wuffs(pngbuf, siz_pngbuf, &img_wuffs_size);
+        b = spngt_time();
+
+        if(!img_wuffs) printf("ERROR: wuffs decode failed\n");
+
+        elapsed = b - a;
+        if(best.wuffs > elapsed) best.wuffs = elapsed;
+
+        free(img_wuffs);
     }
-    
+
     print_times(&best);
-    
+
     return 0;
 }
 
@@ -173,6 +180,8 @@ int main(int argc, char **argv)
         printf("stb_image 2.19 (2018-02-11)\n");
 
         printf("lodepng %s\n", LODEPNG_VERSION_STRING);
+
+        printf("wuffs %s\n", WUFFS_VERSION_STRING);
 
         if(do_encode) printf("\nencode times are the best of %d runs\n", encode_runs);
         printf("\ndecode times are the best of %d runs\n", decode_runs);

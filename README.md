@@ -2,8 +2,9 @@
 
 SPNGT is a benchmarking and testing utility for [libspng](https://libspng.org),
 [libpng](http://www.libpng.org/pub/png/libpng.html),
-[stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and
-[lodepng](https://github.com/lvandeve/lodepng).
+[stb_image](https://github.com/nothings/stb/blob/master/stb_image.h),
+[lodepng](https://github.com/lvandeve/lodepng) and
+[wuffs](https://github.com/google/wuffs).
 
 This is a standalone project, it is also used as a subproject in libspng for benchmarking
 and to host non-libspng code.
