@@ -7,6 +7,13 @@ project('spngt', 'c',
     ]
 )
 
+if get_option('use_zlibng') == true
+    cmake = import('cmake')
+    zng_sp = cmake.subproject('zlib-ng')
+    zng_dep = zng_sp.dependency('zlib')
+    meson.override_dependency('zlib', zng_dep) # doesn't work
+endif
+
 cc = meson.get_compiler('c')
 
 spngt_deps = [

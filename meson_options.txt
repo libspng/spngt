@@ -1,1 +1,2 @@
 option('benchmarks', type : 'boolean', value : true, yield : true, description : 'used for integrating into libspng')
+option('use_zlibng', type : 'boolean', value : false, description : 'use zlib-ng')
