@@ -1,0 +1,5 @@
+[wrap-git]
+directory = qoi
+url = https://github.com/phoboslab/qoi.git
+revision = head
+patch_directory = qoi
