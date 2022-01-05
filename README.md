@@ -17,8 +17,10 @@ and to host non-libspng code.
 
 Meson will fall back to using [wraps](https://mesonbuild.com/Wrap-dependency-system-manual.html)
 if the following are not found on the system:
-* libspng
+* spng
 * libpng
+* stb_image
+* lodepng
 * zlib
 * wuffs
 

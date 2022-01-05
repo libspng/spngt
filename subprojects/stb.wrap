@@ -1,0 +1,8 @@
+[wrap-git]
+directory = stb
+url = https://github.com/nothings/stb.git
+
+# Sep 10, 2021
+revision=af1a5bc352164740c1cc1354942b1c6b72eacb8a 
+
+patch_directory = stb

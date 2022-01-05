@@ -1,0 +1,8 @@
+[wrap-git]
+directory = lodepng
+url = https://github.com/lvandeve/lodepng.git
+
+# Jun 27, 2021
+revision=8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a 
+
+patch_directory = lodepng
