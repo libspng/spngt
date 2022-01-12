@@ -1,5 +1,4 @@
-#ifndef TEST_WUFFS_H
-#define TEST_WUFFS_H
+#include "spngt.h"
 
 #define WUFFS_IMPLEMENTATION
 
@@ -15,7 +14,12 @@
 
 #include <stdio.h>
 
-unsigned char *getimage_wuffs(unsigned char *buf, size_t size, size_t *out_size)
+void spngt_print_version_wuffs(void)
+{
+    printf("wuffs %s\n", WUFFS_VERSION_STRING);
+}
+
+static unsigned char *getimage_wuffs(unsigned char *buf, size_t size, size_t *out_size)
 {
 	wuffs_base__io_buffer bufwrap =
 		wuffs_base__ptr_u8__reader(buf, size, 1 /* true */);
@@ -98,4 +102,22 @@ fail_config:
 	return NULL;
 }
 
-#endif /* TEST_WUFFS_H */
+int spngt_decode_wuffs(struct spngt_params *params)
+{
+	if(params->fmt != SPNG_FMT_RGBA8) return SPNGT_ENOTSUPP;
+
+	enum spngt_errno ret = 0;
+
+	unsigned char *img_wuffs = getimage_wuffs(params->png, params->png_size, &params->image_size);
+
+	if(img_wuffs == NULL) ret = SPNGT_ERROR;
+
+	return ret;
+}
+
+int spngt_encode_wuffs(struct spngt_params *params)
+{
+	enum spngt_errno ret = SPNGT_ENOTSUPP;
+
+	return ret;
+}

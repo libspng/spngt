@@ -20,7 +20,12 @@ spngt_deps = [
 ]
 
 spngt_src = files(
-    'spngt.c'
+    'spngt.c',
+    'spngt_libpng.c',
+    'spngt_spng.c',
+    'spngt_lodepng.c',
+    'spngt_stb.c',
+    'spngt_wuffs.c',
 )
 
 spngt_exe = executable('spngt', spngt_src, dependencies : spngt_deps)
