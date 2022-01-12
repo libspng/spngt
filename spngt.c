@@ -96,9 +96,9 @@ static void spngt_measure(uint64_t start, uint64_t end, uint64_t *best)
     if(*best > elapsed) *best = elapsed;
 }
 
-static const char *spngt_strerror(enum spngt_errno errno)
+static const char *spngt_strerror(enum spngt_errno err)
 {
-    switch(errno)
+    switch(err)
     {
         case SPNGT_OK: return "success";
         case SPNGT_EINVAL: return "invalid argument";
