@@ -35,7 +35,7 @@ meson build --buildtype=release
 
 ```bash
 cd build
-meson test --benchmark --suite decode #or encode
+meson test -t 0 --benchmark --suite decode #or encode
 cat meson-logs/benchmarklog.txt
 ```
 
