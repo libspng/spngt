@@ -12,8 +12,8 @@ if get_option('benchmarks') == false
 endif
 
 spngt_deps = [
-    dependency('spng', fallback : ['spng', 'spng_dep']),
-    dependency('libpng', fallback : [ 'libpng', 'png_dep']),
+    dependency('spng'),
+    dependency('libpng'),
     dependency('stb'),
     dependency('lodepng'),
     dependency('wuffs'),
