@@ -211,7 +211,6 @@ int spngt_encode_libpng(struct spngt_params *params)
     png_structp png_ptr;
     png_bytep *row_pointers = NULL;
     struct spng_ihdr *ihdr = &params->ihdr;
-    size_t buf_size = params->image_size + (1 << 20);
 
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     info_ptr = png_create_info_struct(png_ptr);
@@ -220,14 +219,15 @@ int spngt_encode_libpng(struct spngt_params *params)
     {
         printf("libpng init failed\n");
         png_destroy_write_struct(&png_ptr, &info_ptr);
-        return 1;
+        return SPNGT_ERROR;
     }
 
     if(setjmp(png_jmpbuf(png_ptr)))
     {
         printf("libpng error\n");
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-        return 1;
+        png_destroy_write_struct(&png_ptr, &info_ptr);
+        free(row_pointers);
+        return SPNGT_ERROR;
     }
 
     if(params->override_defaults)
@@ -239,9 +239,7 @@ int spngt_encode_libpng(struct spngt_params *params)
         png_set_filter(png_ptr, 0, params->filter_choice);
     }
 
-    params->png = malloc(buf_size);
-
-    struct spngt_buf_state state = { .data = params->png, .bytes_left = buf_size };
+    struct spngt_buf_state state = { .data = params->png, .bytes_left = params->png_size };
 
     png_set_write_fn(png_ptr, &state, write_fn, flush_fn);
 
@@ -277,15 +275,15 @@ int spngt_encode_libpng(struct spngt_params *params)
 
     png_write_info(png_ptr, info_ptr);
 
-    png_set_filter(png_ptr, 0, PNG_NO_FILTERS);
-
     png_write_image(png_ptr, row_pointers);
 
     png_write_end(png_ptr, info_ptr);
 
     png_destroy_write_struct(&png_ptr, &info_ptr);
 
-    params->png_size = buf_size - state.bytes_left;
+    free(row_pointers);
+
+    params->png_size = params->png_size - state.bytes_left;
 
     return 0;
 }

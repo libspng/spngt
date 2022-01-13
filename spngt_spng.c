@@ -118,12 +118,13 @@ skip_err:
 int spngt_encode_spng(struct spngt_params *params)
 {
     enum spng_errno ret = 0;
+
     spng_ctx *ctx = spng_ctx_new(SPNG_CTX_ENCODER);
 
     if(ctx == NULL)
     {
         printf("spng_ctx_new() failed\n");
-        return 2;
+        return SPNGT_EMEM;
     }
 
     struct spngt_buf_state state = { .data = params->png, .bytes_left = params->png_size };
@@ -156,9 +157,13 @@ int spngt_encode_spng(struct spngt_params *params)
     params->png_size = params->png_size - state.bytes_left;
 
 err:
-    if(ret) printf("encode error (%d): %s\n", ret, spng_strerror(ret));
-
     spng_ctx_free(ctx);
 
-    return ret;
+    if(ret)
+    {
+        printf("encode error (%d): %s\n", ret, spng_strerror(ret));
+        return SPNGT_ERROR;
+    }
+
+    return 0;
 }
