@@ -9,6 +9,7 @@ void spngt_print_version_lodepng(void)
 
 int spngt_encode_lodepng(struct spngt_params *params)
 {
+    return SPNGT_ENOTSUPP;
     unsigned char *out;
     size_t encoded_size;
 

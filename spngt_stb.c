@@ -29,6 +29,7 @@ void spngt_print_version_stb(void)
 
 int spngt_encode_stb(struct spngt_params *params)
 {
+    return SPNGT_ENOTSUPP;
     enum spngt_errno ret = 0;
     struct spngt_buf_state buf_state = { .data = params->png, .bytes_left = params->png_size };
 
