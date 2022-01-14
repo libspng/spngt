@@ -211,6 +211,41 @@ static int encode_benchmark(struct spngt_params *params)
     return ret;
 }
 
+static void print_png_info(struct spng_ihdr *ihdr, const char *path, size_t siz_pngbuf)
+{
+    const char *clr_type_str;
+    if(ihdr->color_type == SPNG_COLOR_TYPE_GRAYSCALE)
+        clr_type_str = "GRAY";
+    else if(ihdr->color_type == SPNG_COLOR_TYPE_TRUECOLOR)
+        clr_type_str = "RGB";
+    else if(ihdr->color_type == SPNG_COLOR_TYPE_INDEXED)
+        clr_type_str = "INDEXED";
+    else if(ihdr->color_type == SPNG_COLOR_TYPE_GRAYSCALE_ALPHA)
+        clr_type_str = "GRAY-ALPHA";
+    else
+        clr_type_str = "RGBA";
+
+    const char *name = strrchr(path, '/');
+
+    if(!name) name = strrchr(path, '\\');
+
+    if(name) name++;
+
+    if(!name) name = path;
+
+    const char *unit = "B";
+
+    if(siz_pngbuf > 1024)
+    {
+        unit = "KB";
+        siz_pngbuf /= 1024;
+    }
+
+    printf("%s %zu %s  %s %" PRIu8 "-bit, %" PRIu32 "x%" PRIu32 " %s",
+            name, siz_pngbuf, unit, clr_type_str, ihdr->bit_depth, ihdr->width, ihdr->height,
+            ihdr->interlace_method ? "interlaced" : "non-interlaced\n\n");
+}
+
 int main(int argc, char **argv)
 {
     if(argc < 2)
@@ -223,10 +258,7 @@ int main(int argc, char **argv)
 
     if(argc > 2)
     {
-        if(!strcmp(argv[2], "enc"))
-        {
-            do_encode = 1;
-        }
+        if(!strcmp(argv[2], "enc")) do_encode = 1;
         else printf("unrecognized option: %s\n", argv[2]);
     }
 
@@ -278,47 +310,53 @@ int main(int argc, char **argv)
 
     enum spngt_errno ret = 0;
 
+    struct spngt_params params =
+    {
+        .png = pngbuf,
+        .png_size = siz_pngbuf,
+
+        .fmt = SPNG_FMT_PNG,
+    };
+
+    ret = spngt_decode_spng(&params);
+
+    if(ret)
+    {
+        printf("failed to fetch PNG info: %s\n", spngt_strerror(ret));
+        goto err;
+    }
+
+    print_png_info(&params.ihdr, argv[1], siz_pngbuf);
+
     if(do_encode)
     {
-        struct spngt_params params =
-        {
-            .png = pngbuf,
-            .png_size = siz_pngbuf,
+        params.override_defaults = 0;
 
-            .fmt = SPNG_FMT_PNG,
+        params.compression_level = 6;
+        params.window_bits = 15;
+        params.mem_level = 8;
+        params.strategy = SPNGT_Z_FILTERED;
 
-            .override_defaults = 0,
+        params.filter_choice = SPNG_FILTER_CHOICE_ALL;
 
-            .compression_level = 6,
-            .window_bits = 15,
-            .mem_level = 8,
-            .strategy = SPNGT_Z_FILTERED,
+        ret = encode_benchmark(&params);
 
-            .filter_choice = SPNG_FILTER_CHOICE_ALL
-        };
-
-        ret = spngt_decode_spng(&params);
-
-        if(!ret)
-        {
-            ret = encode_benchmark(&params);
-
-            free(params.image);
-        }
-        else printf("ERROR: failed to prepare image for encode benchmark\n");
+        free(params.image);
     }
     else
     {
-        struct spngt_params params =
-        {
-            .png = pngbuf,
-            .png_size = siz_pngbuf,
-            .fmt = SPNG_FMT_RGBA8
-        };
+        free(params.image);
+        params.image = NULL;
+        params.image_size = 0;
+
+        params.fmt = SPNG_FMT_RGBA8;
 
         ret = decode_benchmark(&params);
     }
 
+    if(ret) printf("%s benchmark failed (%s)\n", do_encode ? "encode" : "decode", spngt_strerror(ret));
+
+err:
     free(pngbuf);
 
     return ret;
