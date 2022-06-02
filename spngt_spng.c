@@ -93,7 +93,7 @@ int spngt_decode_spng(struct spngt_params *params)
     params->image = malloc(params->image_size);
     if(params->image == NULL) goto err;
 
-    r = spng_decode_image(ctx, params->image, params->image_size, params->fmt, 0);
+    r = spng_decode_image(ctx, params->image, params->image_size, params->fmt, SPNG_DECODE_TRNS);
 
     if(r)
     {
