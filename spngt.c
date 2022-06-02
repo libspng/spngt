@@ -74,6 +74,43 @@ static void print_encode_results(void)
     }
 }
 
+static const char *zstrategy_str(enum spngt_zlib_strategy strategy)
+{
+    switch(strategy)
+    {
+        case SPNGT_Z_FILTERED: return "Z_FILTERED";
+        case SPNGT_Z_HUFFMAN_ONLY: return "Z_HUFFMAN_ONLY";
+        case SPNGT_Z_RLE: return "Z_RLE";
+        case SPNGT_Z_FIXED: return "Z_FIXED";
+        case SPNGT_Z_DEFAULT_STRATEGY: return "Z_DEFAULT_STRATEGY";
+        default: return "(UNKNOWN)";
+    }
+}
+
+static void print_encode_params(struct spngt_params *params)
+{
+    if(params->override_defaults)
+    {
+        printf("compression level: %d\n", params->compression_level);
+        printf("zlib strategy: %s\n", zstrategy_str(params->strategy));
+        printf("filters: ");
+
+        if(params->filter_choice != SPNG_FILTER_CHOICE_ALL)
+        {
+            if(params->filter_choice & SPNG_FILTER_CHOICE_NONE) printf("NONE ");
+            if(params->filter_choice & SPNG_FILTER_CHOICE_SUB) printf("SUB ");
+            if(params->filter_choice & SPNG_FILTER_CHOICE_UP) printf("UP ");
+            if(params->filter_choice & SPNG_FILTER_CHOICE_AVG) printf("AVG ");
+            if(params->filter_choice & SPNG_FILTER_CHOICE_PAETH) printf("PAETH ");
+            if(params->filter_choice == SPNG_DISABLE_FILTERING) printf("(NO FILTERING)");
+        }
+        else printf("ALL");
+
+        printf("\n\n");
+    }
+    else printf("Encode parameters: (library defaults)\n\n");
+}
+
 static uint64_t spngt_time(void)
 {
 #if defined(_WIN32)
@@ -185,6 +222,8 @@ static int decode_benchmark(struct spngt_params *params)
 static int encode_benchmark(struct spngt_params *params)
 {
     enum spngt_errno ret = 0;
+
+    print_encode_params(params);
 
     /* Conservative estimate that doesn't require realloc()'s */
     size_t encode_buffer_size = params->image_size + (1 << 20);
