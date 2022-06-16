@@ -1,0 +1,62 @@
+1/7 spngt:encode / image_encode OK             39.22s
+spngt/build/spngt spngt/build/../subprojects/benchmark_images/large_rgb8.png enc
+----------------------------------- output -----------------------------------
+large_rgb8.png 12800 KB  RGB 8-bit, 2403x3591 non-interlaced
+
+libpng    9386793 usec    12852 KB
+spng      9890934 usec    12852 KB
+------------------------------------------------------------------------------
+
+2/7 spngt:encode / image_encode OK             58.28s
+spngt/build/spngt spngt/build/../subprojects/benchmark_images/large_rgba8.png enc
+----------------------------------- output -----------------------------------
+large_rgba8.png 14525 KB  RGBA 8-bit, 2403x3591 non-interlaced
+
+libpng    14080750 usec    14643 KB
+spng      14767121 usec    14643 KB
+------------------------------------------------------------------------------
+
+3/7 spngt:encode / image_encode OK              0.90s
+spngt/build/spngt spngt/build/../subprojects/benchmark_images/large_palette.png enc
+----------------------------------- output -----------------------------------
+large_palette.png 864 KB  INDEXED 8-bit, 2101x1631 non-interlaced
+
+libpng    214021 usec    866 KB
+spng      214401 usec    866 KB
+------------------------------------------------------------------------------
+
+4/7 spngt:encode / image_encode OK              4.67s
+spngt/build/spngt spngt/build/../subprojects/benchmark_images/medium_rgb8.png enc
+----------------------------------- output -----------------------------------
+medium_rgb8.png 2231 KB  RGB 8-bit, 1053x1248 non-interlaced
+
+libpng    1106324 usec    2235 KB
+spng      1188780 usec    2235 KB
+------------------------------------------------------------------------------
+
+5/7 spngt:encode / image_encode OK              9.68s
+spngt/build/spngt spngt/build/../subprojects/benchmark_images/medium_rgba8.png enc
+----------------------------------- output -----------------------------------
+medium_rgba8.png 2865 KB  RGBA 8-bit, 1128x1335 non-interlaced
+
+libpng    2323851 usec    2872 KB
+spng      2464458 usec    2872 KB
+------------------------------------------------------------------------------
+
+6/7 spngt:encode / image_encode OK              0.44s
+spngt/build/spngt spngt/build/../subprojects/benchmark_images/small_rgb8.png enc
+----------------------------------- output -----------------------------------
+small_rgb8.png 211 KB  RGB 8-bit, 562x222 non-interlaced
+
+libpng    101943 usec    211 KB
+spng      109832 usec    211 KB
+------------------------------------------------------------------------------
+
+7/7 spngt:encode / image_encode OK              0.81s
+spngt/build/spngt spngt/build/../subprojects/benchmark_images/small_rgba8.png enc
+----------------------------------- output -----------------------------------
+small_rgba8.png 243 KB  RGBA 8-bit, 562x222 non-interlaced
+
+libpng    192611 usec    243 KB
+spng      202887 usec    243 KB
+------------------------------------------------------------------------------
