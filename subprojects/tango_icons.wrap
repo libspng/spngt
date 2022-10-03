@@ -1,0 +1,7 @@
+[wrap-git]
+directory = tango_icons
+
+url = https://github.com/libspng/tango-icon-library-pngs.git
+revision = head
+
+patch_directory = tango_icons

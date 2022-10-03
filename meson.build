@@ -34,6 +34,9 @@ spngt_exe = executable('spngt', spngt_src, dependencies : spngt_deps)
 
 benchmark('info', spngt_exe, args : 'info')
 
+tango_icons = subproject('tango_icons').get_variable('png_icons')
+benchmark('tango', spngt_exe, suite : [ 'extended' ], args : [ files('main.lua'), tango_icons])
+
 images = subproject('benchmark_images').get_variable('all_images')
 
 foreach img : images
