@@ -437,7 +437,3 @@ png_icons = png64_icons + png512_icons
 tango64_dep = declare_dependency(sources : png64_icons)
 tango512_dep = declare_dependency(sources : png512_icons)
 tango_dep = declare_dependency(sources : png_icons)
-
-meson.override_dependency('tango64_icons', png64_icons)
-meson.override_dependency('tango512_icons', png512_icons)
-meson.override_dependency('tango_icons', png_icons)
