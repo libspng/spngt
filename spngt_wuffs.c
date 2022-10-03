@@ -108,9 +108,9 @@ int spngt_decode_wuffs(struct spngt_params *params)
 
 	enum spngt_errno ret = 0;
 
-	unsigned char *img_wuffs = getimage_wuffs(params->png, params->png_size, &params->image_size);
+	params->image = getimage_wuffs(params->png, params->png_size, &params->image_size);
 
-	if(img_wuffs == NULL) ret = SPNGT_ERROR;
+	if(params->image == NULL) ret = SPNGT_ERROR;
 
 	return ret;
 }
