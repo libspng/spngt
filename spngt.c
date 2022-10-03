@@ -9,7 +9,7 @@
 
 typedef int spngt_fn(struct spngt_params *params);
 
-struct spngt_library
+struct spngt__library
 {
     const char *name;
     spngt_fn *decode_fn;
@@ -18,20 +18,20 @@ struct spngt_library
     uint64_t encoded_size;
 };
 
-static int decode_runs = 5;
-static int encode_runs = 2;
+static int decode_runs = SPNGT_DEFAULT_DECODE_RUNS;
+static int encode_runs = SPNGT_DEFAULT_ENCODE_RUNS;
 
-static struct spngt_library libraries[10];
+static struct spngt__library libraries[10];
 static int library_count = 0;
 
-static void add_library_struct(const struct spngt_library *lib)
+static void add_library_struct(const struct spngt__library *lib)
 {
     libraries[library_count] = *lib;
     libraries[library_count].best = UINT64_MAX;
     library_count++;
 }
 
-#define add_library(lib_name) add_library_struct(&(struct spngt_library)\
+#define add_library(lib_name) add_library_struct(&(struct spngt__library)\
     {\
         .name = #lib_name, \
         .decode_fn = spngt_decode_##lib_name, \
@@ -42,7 +42,7 @@ static void add_library_struct(const struct spngt_library *lib)
 
 static void print_times(void)
 {
-    const struct spngt_library *lib = libraries;
+    const struct spngt__library *lib = libraries;
 
     int i;
     for(i=0; i < library_count; i++, lib++)
@@ -58,7 +58,7 @@ static void print_times(void)
 
 static void print_encode_results(void)
 {
-    const struct spngt_library *lib = libraries;
+    const struct spngt__library *lib = libraries;
 
     int i;
     for(i=0; i < library_count; i++, lib++)
@@ -111,7 +111,7 @@ static void print_encode_params(struct spngt_params *params)
     else printf("Encode parameters: (library defaults)\n\n");
 }
 
-static uint64_t spngt_time(void)
+uint64_t spngt_time(void)
 {
 #if defined(_WIN32)
     FILETIME ft;
@@ -125,15 +125,14 @@ static uint64_t spngt_time(void)
 #endif
 }
 
-/* Calculate time elapsed and update *best if *best is larger */
-static void spngt_measure(uint64_t start, uint64_t end, uint64_t *best)
+void spngt_measure(uint64_t start, uint64_t end, uint64_t *best)
 {
     uint64_t elapsed = end - start;
 
     if(*best > elapsed) *best = elapsed;
 }
 
-static const char *spngt_strerror(enum spngt_errno err)
+const char *spngt_strerror(enum spngt_errno err)
 {
     switch(err)
     {
@@ -148,10 +147,11 @@ static const char *spngt_strerror(enum spngt_errno err)
     return "unknown error";
 }
 
-static int decode_and_measure(struct spngt_library *lib, struct spngt_params *params)
+static int decode_and_measure(enum spngt_library library, struct spngt_params *params)
 {
     uint64_t a, b;
     enum spngt_errno e = 0;
+    struct spngt__library *lib = &libraries[library];
 
     int i;
     for(i=0; i < decode_runs; i++)
@@ -175,10 +175,11 @@ static int decode_and_measure(struct spngt_library *lib, struct spngt_params *pa
     return 0;
 }
 
-static int encode_and_measure(struct spngt_library *lib, struct spngt_params *params)
+int encode_and_measure(enum spngt_library library, struct spngt_params *params)
 {
     uint64_t a, b;
     enum spngt_errno e = 0;
+    struct spngt__library *lib = &libraries[library];
     size_t encode_buffer_size = params->png_size;
 
     int i;
@@ -209,7 +210,7 @@ static int decode_benchmark(struct spngt_params *params)
     int i;
     for(i=0; i < library_count; i++)
     {
-        e = decode_and_measure(&libraries[i], params);
+        e = decode_and_measure(i, params);
 
         if(e) return e;
     }
@@ -240,7 +241,7 @@ static int encode_benchmark(struct spngt_params *params)
     int i;
     for(i=0; i < library_count; i++)
     {
-        encode_and_measure(&libraries[i], params);
+        encode_and_measure(i, params);
     }
 
     free(params->png);
@@ -285,41 +286,15 @@ static void print_png_info(struct spng_ihdr *ihdr, const char *path, size_t siz_
             ihdr->interlace_method ? "interlaced" : "non-interlaced\n\n");
 }
 
-int main(int argc, char **argv)
+int spngt_prefetch_file(const char *path, struct spngt_params *params)
 {
-    if(argc < 2)
-    {
-        printf("no input file\n");
-        return 1;
-    }
-
-    int do_encode = 0;
-
-    if(argc > 2)
-    {
-        if(!strcmp(argv[2], "enc")) do_encode = 1;
-        else printf("unrecognized option: %s\n", argv[2]);
-    }
-
-    if(!strcmp(argv[1], "info"))
-    {
-        #define XX(lib) spngt_print_version_##lib();
-            SPNGT_LIBS(XX)
-        #undef XX
-
-        if(do_encode) printf("\nencode times are the best of %d runs\n", encode_runs);
-        printf("\ndecode times are the best of %d runs\n", decode_runs);
-
-        return 0;
-    }
-
     FILE *png;
     unsigned char *pngbuf;
-    png = fopen(argv[1], "rb");
+    png = fopen(path, "rb");
 
     if(png == NULL)
     {
-        printf("error opening input file %s\n", argv[1]);
+        printf("error opening input file %s\n", path);
         return 1;
     }
 
@@ -343,19 +318,62 @@ int main(int argc, char **argv)
         return 1;
     }
 
-#define XX(lib) add_library(lib);
-    SPNGT_LIBS(XX)
-#undef XX
+    params->png = pngbuf;
+    params->png_size = siz_pngbuf;
+    return 0;
+}
+
+int main(int argc, char **argv)
+{
+    if(argc < 2)
+    {
+        printf("no input file\n");
+        return 1;
+    }
+
+    int do_encode = 0;
+
+    const char *filepath = argv[1];
+    const char *dot = strrchr(filepath, '.');
+
+    if(dot && !strcmp(dot, ".lua"))
+    {
+        return spngt_exec_script(argc, argv);
+    }
+
+    if(argc > 2)
+    {
+        if(!strcmp(argv[2], "enc")) do_encode = 1;
+        else printf("unrecognized option: %s\n", argv[2]);
+    }
+
+    if(!strcmp(argv[1], "info"))
+    {
+        #define XX(lib) spngt_print_version_##lib();
+            SPNGT_LIBS(XX)
+        #undef XX
+
+        if(do_encode) printf("\nencode times are the best of %d runs\n", encode_runs);
+        printf("\ndecode times are the best of %d runs\n", decode_runs);
+
+        return 0;
+    }
 
     enum spngt_errno ret = 0;
 
     struct spngt_params params =
     {
-        .png = pngbuf,
-        .png_size = siz_pngbuf,
-
         .fmt = SPNG_FMT_PNG,
+        .encode_runs = encode_runs
     };
+
+    ret = spngt_prefetch_file(filepath, &params);
+
+    if(ret) goto err;
+
+#define XX(lib) add_library(lib);
+    SPNGT_LIBS(XX)
+#undef XX
 
     ret = spngt_decode_spng(&params);
 
@@ -365,7 +383,7 @@ int main(int argc, char **argv)
         goto err;
     }
 
-    print_png_info(&params.ihdr, argv[1], siz_pngbuf);
+    print_png_info(&params.ihdr, argv[1], params.png_size);
 
     if(do_encode)
     {
@@ -396,7 +414,7 @@ int main(int argc, char **argv)
     if(ret) printf("%s benchmark failed (%s)\n", do_encode ? "encode" : "decode", spngt_strerror(ret));
 
 err:
-    free(pngbuf);
+    free(params.png);
 
     return ret;
 }

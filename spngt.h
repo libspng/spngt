@@ -7,6 +7,9 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+#define SPNGT_DEFAULT_DECODE_RUNS 5
+#define SPNGT_DEFAULT_ENCODE_RUNS 2
+
 enum spngt_errno
 {
     SPNGT_OK = 0,
@@ -39,6 +42,9 @@ struct spngt_params
     struct spng_ihdr ihdr;
     struct spng_plte plte;
 
+    int decode_runs;
+    int encode_runs;
+
     /* Applies to all options below */
     int override_defaults;
 
@@ -64,6 +70,23 @@ struct spngt_buf_state
     XX(stb) \
     XX(lodepng) \
     XX(wuffs)
+
+enum spngt_library
+{
+#define XX(library) library,
+    SPNGT_LIBS(XX)
+#undef XX
+};
+
+uint64_t spngt_time(void);
+
+/* Calculate time elapsed and update *best if *best is larger */
+void spngt_measure(uint64_t start, uint64_t end, uint64_t *best);
+
+const char *spngt_strerror(enum spngt_errno err);
+
+int spngt_prefetch_file(const char *path, struct spngt_params *params);
+int spngt_exec_script(int argc, char **argv);
 
 #define XX(lib) \
     void spngt_print_version_##lib(void); \

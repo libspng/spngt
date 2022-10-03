@@ -12,6 +12,7 @@ if get_option('benchmarks') == false
 endif
 
 spngt_deps = [
+    dependency('lua'),
     dependency('spng'),
     dependency('libpng'),
     dependency('stb'),
@@ -21,6 +22,7 @@ spngt_deps = [
 
 spngt_src = files(
     'spngt.c',
+    'spngt_lua.c',
     'spngt_libpng.c',
     'spngt_spng.c',
     'spngt_lodepng.c',

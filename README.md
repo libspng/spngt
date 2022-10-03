@@ -13,7 +13,6 @@ and to host non-libspng code.
 
 * [Meson](https://mesonbuild.com) 0.55.0 or later
 * Git LFS for downloading the [benchmark images](https://github.com/libspng/benchmark_images/)
-* lodepng and stb_image are included
 
 Meson will fall back to using [wraps](https://mesonbuild.com/Wrap-dependency-system-manual.html)
 if the following are not found on the system:
@@ -21,8 +20,10 @@ if the following are not found on the system:
 * libpng
 * stb_image
 * lodepng
+* stb
 * zlib
 * wuffs
+* Lua
 
 ## Creating a build
 
@@ -56,3 +57,19 @@ cat meson-logs/benchmarklog.txt
 The benchmarks try to exclude system overhead by preloading the PNG into a buffer,
 this provides better feedback for development,
 real world performance may not be the same but has been accurate been so far.
+
+## Command-line interface
+
+Read one file and print the best decode/encode time for each library
+
+```bash
+$ spngt IMAGE.png
+$ spngt IMAGE.png enc # For encode benchmarks
+$ spngt info # Print library versions and other information
+```
+
+Or execute a lua script, the rest of the arguments will be exposed through the `arg` global
+
+```bash
+$ spngt SCRIPT.lua FOO.png BAR.png
+```
