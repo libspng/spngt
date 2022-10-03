@@ -34,10 +34,12 @@ spngt_exe = executable('spngt', spngt_src, dependencies : spngt_deps)
 
 benchmark('info', spngt_exe, args : 'info')
 
-tango_icons = subproject('tango_icons').get_variable('png_icons')
-benchmark('tango', spngt_exe, suite : [ 'extended' ], args : [ files('main.lua'), tango_icons])
-
 images = subproject('benchmark_images').get_variable('all_images')
+tango_icons = subproject('tango_icons').get_variable('png_icons')
+kodak_images = subproject('kodakimages').get_variable('all_images')
+
+benchmark('tango', spngt_exe, suite : [ 'extended', 'icons' ], args : [ files('main.lua'), tango_icons])
+benchmark('kodak', spngt_exe, suite : [ 'extended', 'photos' ], args : [ files('main.lua'), kodak_images])
 
 foreach img : images
     benchmark('image_decode', spngt_exe, suite : 'decode', args : img)

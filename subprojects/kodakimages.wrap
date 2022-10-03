@@ -1,0 +1,7 @@
+[wrap-git]
+directory = kodakimages
+
+url = https://github.com/libspng/kodakimagecollection.git
+revision = head
+
+patch_directory = kodakimages
