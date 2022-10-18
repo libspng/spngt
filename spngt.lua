@@ -31,14 +31,14 @@ local spngt_file = {}
 local spngt_params = {}
 
 ---Prefetch PNG file
+---@param filename string
 ---@return spngt_file
 function spngt.prefetch(filename)
 end
 
 ---Get ihdr from PNG
----@param filename string
----@return spngt_file
-function spngt_file:get_ihdr(filename)
+---@return spngt_ihdr
+function spngt_file:get_ihdr()
 end
 
 ---Discard cached file and associated buffers
@@ -47,7 +47,7 @@ end
 
 ---Measure encode time
 ---@param params spngt_params
----@return integer spngt_result
+---@return spngt_result
 function spngt_file:encode_benchmark(params)
 end
 
@@ -69,7 +69,7 @@ spngt.DISABLE_FILTERING = 0
 spngt.FILTER_CHOICE_NONE = 8
 spngt.FILTER_CHOICE_SUB = 16
 spngt.FILTER_CHOICE_UP = 32
-spngt.FILTER_CHOICE_AVG = 65
+spngt.FILTER_CHOICE_AVG = 64
 spngt.FILTER_CHOICE_PAETH = 128
 spngt.FILTER_CHOICE_ALL = (8|16|32|64|128)
 
