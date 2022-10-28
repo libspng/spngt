@@ -325,17 +325,17 @@ end
 
 
 for i=1, #top do
-    local speedup_best = experiments[i].speedup
-    local speedup_worst = experiments[i].speedup
-    local speedup_avg = experiments[i].speedup
+    local speedup_best = experiments[top[i]].speedup
+    local speedup_worst = experiments[top[i]].speedup
+    local speedup_avg = experiments[top[i]].speedup
     local param_instances = 1
 
-    local size_increase_best = experiments[i].size_increase
-    local size_increase_worst = experiments[i].size_increase
-    local size_increase_avg = experiments[i].size_increase
+    local size_increase_best = experiments[top[i]].size_increase
+    local size_increase_worst = experiments[top[i]].size_increase
+    local size_increase_avg = experiments[top[i]].size_increase
 
     for j=i+1, #experiments do
-        if param_eq(experiments[i].params, experiments[j].params) then
+        if param_eq(experiments[top[i]].params, experiments[j].params) and j ~= top[i] then
 
             param_instances = param_instances + 1
 
