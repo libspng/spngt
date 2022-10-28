@@ -71,5 +71,15 @@ $ spngt info # Print library versions and other information
 Or execute a lua script, the rest of the arguments will be exposed through the `arg` global
 
 ```bash
-$ spngt SCRIPT.lua FOO.png BAR.png
+$ spngt main.lua SUITE_NAME FOO.png BAR.png #main.lua takes a base filename (SUITE_NAME) for its output files
+```
+
+## Running experiments
+
+Results are written to `.csv` files in the build directory, see [main.lua](main.lua).
+
+```bash
+meson test -t 0 --benchmark tango
+meson test -t 0 --benchmark kodak
+meson test -t 0 --benchmark mixed
 ```
