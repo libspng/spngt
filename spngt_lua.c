@@ -68,7 +68,7 @@ static int read_params(lua_State *L, int arg, struct spngt_params *params)
     int type_compression_level = lua_getfield(L, arg, "compression_level");
     int type_window_bits = lua_getfield(L, arg, "window_bits");
     int type_mem_level = lua_getfield(L, arg, "mem_level");
-    int type_strategy = lua_getfield(L, arg, "strategy");
+    int type_strategy = lua_getfield(L, arg, "zlib_strategy");
     int type_filter_choice = lua_getfield(L, arg, "filter_choice");
 
     if(fmt) params->fmt = luaL_checkinteger(L, -6);
