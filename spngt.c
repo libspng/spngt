@@ -387,6 +387,8 @@ int main(int argc, char **argv)
 
     if(do_encode)
     {
+        free(params.png); // not needed at this point, will be overwriten by encode_benchmark()
+
         params.override_defaults = 0;
 
         params.compression_level = 6;
@@ -399,6 +401,7 @@ int main(int argc, char **argv)
         ret = encode_benchmark(&params);
 
         free(params.image);
+        params.png = NULL;
     }
     else
     {
